@@ -3,7 +3,7 @@
 #### What Is This?
 
 opengl-engine is nothing more than a public repo created to document my
-progress with OpenGL throught 2025. I do not intend for this to be a serious
+progress with OpenGL throughout 2025. I do not intend for this to be a serious
 project, usable for more than hobbies, but I do intend for this to be a
 minimally functional 3D engine that can be interacted with. I'm following the
 *Learn OpenGL* tutorial series online. I have already worked with OpenGL,
