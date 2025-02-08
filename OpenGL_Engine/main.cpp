@@ -148,11 +148,21 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		shaderProgram.useProgram();
-		
-		GLuint transformLoc = glGetUniformLocation(shaderProgram.program_id, "transform");
-		transform = glm::rotate(transform, delta, glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-		
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+		// retrieve the matrix uniform locations
+		GLuint modelLoc = glGetUniformLocation(shaderProgram.program_id, "model");
+		GLuint viewLoc = glGetUniformLocation(shaderProgram.program_id, "view");
+		GLuint projectLoc = glGetUniformLocation(shaderProgram.program_id, "projection");
+		// pass them to the shaders
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		float currTime = (float)glfwGetTime();
