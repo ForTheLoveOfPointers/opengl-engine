@@ -138,6 +138,17 @@ int main() {
 	glm::mat4 transform = glm::mat4(1.0f); // Identity matrix
 	transform = glm::translate(transform, translationVec);
 
+	// CAMERA TRIHEDRON SETUP. THIS WILL BE AN R3 BASE, FOR THE VIEW TRANSFORM
+	//////////////////////////////////////////////////////////////////////////
+
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 2.5f);
+	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 cameraRight = glm::vec3(0.0f, 1.0f, 0.0f);
+	
+	glm::mat4 view = glm::lookAt(cameraPos,
+		cameraTarget,
+		cameraRight);
+
 	// MAIN LOOP
 	////////////
 	
@@ -149,10 +160,8 @@ int main() {
 
 		shaderProgram.useProgram();
 		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		// retrieve the matrix uniform locations
 		GLuint modelLoc = glGetUniformLocation(shaderProgram.program_id, "model");
