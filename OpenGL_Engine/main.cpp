@@ -141,6 +141,7 @@ int main() {
 	// CAMERA TRIHEDRON SETUP. THIS WILL BE AN R3 BASE, FOR THE VIEW TRANSFORM
 	//////////////////////////////////////////////////////////////////////////
 
+	// TODO: change camera to be a class, so that translation and rotation become simple
 	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 2.5f);
 	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 	glm::vec3 cameraRight = glm::vec3(0.0f, 1.0f, 0.0f);
