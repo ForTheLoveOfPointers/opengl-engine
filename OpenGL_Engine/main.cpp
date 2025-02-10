@@ -17,6 +17,7 @@
 // custom
 #include "shader.hpp"
 #include "program.hpp"
+#include "camera.hpp"
 
 #define WIDTH 840
 #define HEIGHT 1024
@@ -51,6 +52,8 @@ GLFWwindow* setupEnv() {
 	return window;
 }
 
+
+void getInput(GLFWwindow* window, Camera* cam);
 
 int main() {
 	
@@ -138,26 +141,27 @@ int main() {
 	glm::mat4 transform = glm::mat4(1.0f); // Identity matrix
 	transform = glm::translate(transform, translationVec);
 
-	// CAMERA TRIHEDRON SETUP. THIS WILL BE AN R3 BASE, FOR THE VIEW TRANSFORM
-	//////////////////////////////////////////////////////////////////////////
-
-	// TODO: change camera to be a class, so that translation and rotation become simple
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 2.5f);
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 cameraRight = glm::vec3(0.0f, 1.0f, 0.0f);
+	// CAMERA TRIHEDRON SETUP
+	/////////////////////////
 	
-	glm::mat4 view = glm::lookAt(cameraPos,
-		cameraTarget,
-		cameraRight);
+	Camera cam(
+		glm::vec3(0.0f, 0.0f, 2.5f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f)
+	);
 
 	// MAIN LOOP
 	////////////
-	
+	// TODO: CLEAN THE MAIN FUNCTION AND MAKE IT SMALLER
+
 	float lastTime = (float)glfwGetTime();
 	float delta = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.5, 0.0, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		getInput(window, &cam);
 
 		shaderProgram.useProgram();
 		glm::mat4 model = glm::mat4(1.0f);
@@ -168,9 +172,10 @@ int main() {
 		GLuint modelLoc = glGetUniformLocation(shaderProgram.program_id, "model");
 		GLuint viewLoc = glGetUniformLocation(shaderProgram.program_id, "view");
 		GLuint projectLoc = glGetUniformLocation(shaderProgram.program_id, "projection");
-		// pass them to the shaders
+		// pass them to the shaders.
+		// TODO: THIS SHOULD BE SETTERS INSIDE THE 'Program' CLASS
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cam.view));
 		glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -183,4 +188,30 @@ int main() {
 	}
 
 	glfwTerminate();
+}
+
+// THIS CODE ABSOLUTELY SUCKS. REFACTOR THE BILLION 'if' STATEMENTS
+// AT LEAST THE WHOLE else if DOESN'T MAKE IT SLOWER THAN USUAL
+void getInput(GLFWwindow* window, Camera* cam) {
+	const float cameraSpeed = 0.01f; // adjust accordingly
+	bool cam_adjust = false;
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	} else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		cam->position -= cameraSpeed * cam->front;
+		cam_adjust = true;
+	} else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		cam->position += cameraSpeed * cam->front;
+		cam_adjust = true;
+	} else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		cam->position -= cam->right * cameraSpeed;
+		cam_adjust = true;
+	} else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		cam->position += cam->right * cameraSpeed;
+		cam_adjust = true;
+	}
+
+	if (cam_adjust) {
+		cam->update_view();
+	}
 }
