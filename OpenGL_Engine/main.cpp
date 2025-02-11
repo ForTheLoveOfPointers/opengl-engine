@@ -22,6 +22,8 @@
 #define WIDTH 840
 #define HEIGHT 1024
 
+float delta = 0.0f;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -157,7 +159,6 @@ int main() {
 	// TODO: CLEAN THE MAIN FUNCTION AND MAKE IT SMALLER
 
 	float lastTime = (float)glfwGetTime();
-	float delta = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.5, 0.0, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -193,7 +194,7 @@ int main() {
 
 // THIS CODE ABSOLUTELY SUCKS. REFACTOR THE BILLION 'if' STATEMENTS
 void getInput(GLFWwindow* window, Camera* cam) {
-	const float cameraSpeed = 0.01f; // adjust accordingly
+	const float cameraSpeed = 1.5f * delta; // adjust accordingly
 	bool cam_adjust = false;
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
@@ -202,7 +203,7 @@ void getInput(GLFWwindow* window, Camera* cam) {
 		// We don't take diagonal movement into account here (yet),
 		// this means that we are, effectively, 42% faster when moving
 		// in a diagonal line.
-		float yaw_change = glm::radians(0.1f);
+		float yaw_change = delta * 1.0f;
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			glm::mat4 model = glm::mat4(1.0f);
 			glm::vec4 helper_front = glm::vec4(cam->front, 1.0f);
