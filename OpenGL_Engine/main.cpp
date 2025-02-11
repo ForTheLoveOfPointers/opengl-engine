@@ -123,7 +123,7 @@ int main() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int x, y, n_channels;
-	unsigned char* image = stbi_load("C:/Users/unhap/OneDrive/Escritorio/C/Graphics/OpenGL_Engine/OpenGL_Engine/image.jpg", &x, &y, &n_channels, 0);
+	unsigned char* image = stbi_load("C:/Users/unhap/OneDrive/Escritorio/C/Graphics/OpenGL_Engine/OpenGL_Engine/image.png", &x, &y, &n_channels, 0);
 
 	if (image) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
@@ -202,6 +202,27 @@ void getInput(GLFWwindow* window, Camera* cam) {
 		// We don't take diagonal movement into account here (yet),
 		// this means that we are, effectively, 42% faster when moving
 		// in a diagonal line.
+		float yaw_change = glm::radians(0.1f);
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec4 helper_front = glm::vec4(cam->front, 1.0f);
+			glm::vec4 helper_right = glm::vec4(cam->right, 1.0f);
+			model = glm::rotate(model, -yaw_change, cam->up);
+			
+			cam->front = glm::vec3( model * helper_front );
+			cam->right = glm::vec3( model * helper_right );
+			cam_adjust = true;
+		}
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+			glm::mat4 model = glm::mat4(1.0f);
+			glm::vec4 helper_front = glm::vec4(cam->front, 1.0f);
+			glm::vec4 helper_right = glm::vec4(cam->right, 1.0f);
+			model = glm::rotate(model, yaw_change, cam->up);
+
+			cam->front = glm::vec3(model * helper_front);
+			cam->right = glm::vec3(model * helper_right);
+			cam_adjust = true;
+		}
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			cam->position -= cameraSpeed * cam->front;
 			cam_adjust = true;
