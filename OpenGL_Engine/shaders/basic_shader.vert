@@ -14,7 +14,10 @@ uniform mat4 projection;
 void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-    normal = vec3( model * vec4(aNormal, 1.0) );
+    //THIS TRANSPOSE INVERSE THING IS HERE IN CASE I WANT TO SCALE MODELS
+    //NON-UNIFORMLY, ELSE THE NORMAL VECTOR WILL BE WRONG. IF I DON'T IMPLEMENT
+    // SUCH THING, THIS OPERATION CAN BE ELIMINATED
+    normal =  mat3( transpose(inverse(model)) ) * aNormal;
     fragPosition = vec3( model * vec4(aPos, 1.0) );
     texCoord = texCoord_;
 }       

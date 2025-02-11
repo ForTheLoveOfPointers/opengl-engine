@@ -171,16 +171,16 @@ int main() {
 		shaderProgram.useProgram();
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		
 		// set uniforms
 		shaderProgram.uniformMatrix4fv("model", model);
 		shaderProgram.uniformMatrix4fv("projection", projection);
 		shaderProgram.uniformMatrix4fv("view", cam.view);
-		shaderProgram.uniform3f("lightColor", glm::vec3(0.2f, 0.5f, 0.8f));
+		shaderProgram.uniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		shaderProgram.uniform3f("lightPos", glm::vec3((float)glm::cos(lastTime), 0.5f, (float)glm::sin(lastTime)));
-		
+		shaderProgram.uniform3f("cameraPos", cam.position);
+
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		float currTime = (float)glfwGetTime();

@@ -2,6 +2,7 @@
 uniform sampler2D texSample;
 uniform vec3 lightColor;
 uniform vec3 lightPos; 
+uniform vec3 cameraPos;
 
 in vec2 texCoord;
 in vec3 normal;
@@ -12,7 +13,14 @@ out vec4 FragColor;
 void main()
 {
     vec3 norm = normalize(normal);
+    vec3 ambient = vec3(0.4, 0.4, 0.4);
     vec3 lightDirection = normalize(lightPos -fragPosition);
+    vec3 camDirection = normalize(cameraPos -fragPosition);
+
     float lightIntesity = max( dot(norm, lightDirection), 0.0 );
-    FragColor = lightIntesity * vec4(lightColor, 1.0f) * texture(texSample, texCoord);
+    float specularIntensity = max( dot(reflect(-lightDirection, norm), camDirection), 0.0);
+    specularIntensity = pow(specularIntensity, 64);
+    float totalIntensity = lightIntesity + specularIntensity;
+
+    FragColor = vec4(ambient + totalIntensity * lightColor, 1.0) * texture(texSample, texCoord);
 }
