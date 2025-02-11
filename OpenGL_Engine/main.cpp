@@ -63,11 +63,11 @@ int main() {
 	auto window = setupEnv();
 	
 	float vertices[] = {
-		// positions          // texture coords
-			0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
-			0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // bottom right
-		   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
-		   -0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left 
+		// positions          // texture coords  // normals
+			0.5f,  0.5f, 0.0f,   1.0f, 1.0f,      0.0f, 0.0f, 1.0f,// top right
+			0.5f, -0.5f, 0.0f,   1.0f, 0.0f,      0.0f, 0.0f, 1.0f,// bottom right
+		   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,      0.0f, 0.0f, 1.0f,// bottom left
+		   -0.5f,  0.5f, 0.0f,   0.0f, 1.0f,      0.0f, 0.0f, 1.0f // top left 
 	};
 	unsigned int indices[] = {
 		0, 1, 3,
@@ -84,11 +84,14 @@ int main() {
 	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// Vertex positions
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	// Vertex texture coordinates
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3*sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
+	// Vertex normals
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	//SHADER AND PROGRAM SETUP
 	//////////////////////////
@@ -176,6 +179,7 @@ int main() {
 		shaderProgram.uniformMatrix4fv("projection", projection);
 		shaderProgram.uniformMatrix4fv("view", cam.view);
 		shaderProgram.uniform3f("lightColor", glm::vec3(0.2f, 0.5f, 0.8f));
+		shaderProgram.uniform3f("lightPos", glm::vec3((float)glm::cos(lastTime), 0.5f, (float)glm::sin(lastTime)));
 		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
