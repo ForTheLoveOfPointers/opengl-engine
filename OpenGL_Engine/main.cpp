@@ -125,7 +125,7 @@ int main() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	int x, y, n_channels;
-	unsigned char* image = stbi_load("C:/Users/unhap/OneDrive/Escritorio/C/Graphics/OpenGL_Engine/OpenGL_Engine/image.png", &x, &y, &n_channels, 0);
+	unsigned char* image = stbi_load("C:/Users/unhap/OneDrive/Escritorio/C/Graphics/OpenGL_Engine/OpenGL_Engine/image.jpg", &x, &y, &n_channels, 0);
 
 	if (image) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
@@ -170,16 +170,13 @@ int main() {
 		glm::mat4 projection = glm::mat4(1.0f);
 		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-		// retrieve the matrix uniform locations
-		GLuint modelLoc = glGetUniformLocation(shaderProgram.program_id, "model");
-		GLuint viewLoc = glGetUniformLocation(shaderProgram.program_id, "view");
-		GLuint projectLoc = glGetUniformLocation(shaderProgram.program_id, "projection");
-		// pass them to the shaders.
-		// TODO: THIS SHOULD BE SETTERS INSIDE THE 'Program' CLASS
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(cam.view));
-		glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
+		
+		// set uniforms
+		shaderProgram.uniformMatrix4fv("model", model);
+		shaderProgram.uniformMatrix4fv("projection", projection);
+		shaderProgram.uniformMatrix4fv("view", cam.view);
+		shaderProgram.uniform3f("lightColor", glm::vec3(0.2f, 0.5f, 0.8f));
+		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
 		float currTime = (float)glfwGetTime();

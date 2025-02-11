@@ -1,5 +1,6 @@
 #include "program.hpp"
 #include <stdexcept>
+#include <glm/gtc/type_ptr.hpp>
 
 void Program::setupProgram(GLuint vertex_shader_id, GLuint fragment_shader_id) {
 	int  success;
@@ -21,4 +22,14 @@ void Program::setupProgram(GLuint vertex_shader_id, GLuint fragment_shader_id) {
 
 void Program::useProgram() {
 	glUseProgram(program_id);
+}
+
+void Program::uniform3f(const char* uniform_name, glm::vec3 vec) {
+	GLuint location = glGetUniformLocation(program_id, uniform_name);
+	glUniform3f(location, vec.x, vec.y, vec.z);
+}
+
+void Program::uniformMatrix4fv(const char* uniform_name, glm::mat4& mat) {
+	GLuint location = glGetUniformLocation(program_id, uniform_name);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 }
