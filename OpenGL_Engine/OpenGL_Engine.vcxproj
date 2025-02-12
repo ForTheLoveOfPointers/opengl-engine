@@ -141,11 +141,13 @@
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="texture_loader\loader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.hpp" />
     <ClInclude Include="program.hpp" />
     <ClInclude Include="shader.hpp" />
+    <ClInclude Include="texture_loader\loader.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basic_shader.frag" />

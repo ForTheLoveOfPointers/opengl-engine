@@ -18,6 +18,7 @@
 #include "shader.hpp"
 #include "program.hpp"
 #include "camera.hpp"
+#include "./texture_loader/loader.hpp"
 
 #define WIDTH 840
 #define HEIGHT 1024
@@ -117,29 +118,11 @@ int main() {
 
 	// TEXTURE AND IMAGE LOADING
 	////////////////////////////
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	const char* image_path = "image.jpg";
+	const char* image_path_two = "awesomeface.jpg";
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	int x, y, n_channels;
-	unsigned char* image = stbi_load("C:/Users/unhap/OneDrive/Escritorio/C/Graphics/OpenGL_Engine/OpenGL_Engine/image.jpg", &x, &y, &n_channels, 0);
-
-	if (image) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		std::cout << "Error loading image" << std::endl;
-	}
-	stbi_image_free(image);
-	shaderProgram.useProgram();
-	glUniform1i(glGetUniformLocation(fragmentShader.shader_id, "texSample"), 0);
+	GLuint texture1 = load_texture(image_path, 0, shaderProgram, "texSample", GL_RGB);
+	GLuint texture2 = load_texture(image_path_two, 1, shaderProgram, "texFace", GL_RGB);
 
 	// TRANSFORMS
 	/////////////
@@ -169,6 +152,10 @@ int main() {
 		getInput(window, &cam);
 
 		shaderProgram.useProgram();
+		
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);

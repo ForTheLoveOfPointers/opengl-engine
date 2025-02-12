@@ -1,5 +1,6 @@
 #version 330 core
 uniform sampler2D texSample;
+uniform sampler2D texFace;
 uniform vec3 lightColor;
 uniform vec3 lightPos; 
 uniform vec3 cameraPos;
@@ -22,5 +23,5 @@ void main()
     specularIntensity = pow(specularIntensity, 64);
     float totalIntensity = lightIntesity + specularIntensity;
 
-    FragColor = vec4(ambient + totalIntensity * lightColor, 1.0) * texture(texSample, texCoord);
+    FragColor = vec4(ambient + totalIntensity * lightColor, 1.0) * mix(texture(texSample, texCoord), texture(texFace, texCoord), 0.8);
 }
