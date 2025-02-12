@@ -94,6 +94,11 @@ int main() {
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+	GLuint ebo;
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
 	//SHADER AND PROGRAM SETUP
 	//////////////////////////
 	Shader vertexShader{};
@@ -111,19 +116,17 @@ int main() {
 	vertexShader.delete_shader();
 	fragmentShader.delete_shader();
 
-	GLuint ebo;
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// TEXTURE AND IMAGE LOADING
 	////////////////////////////
-	const char* image_path = "image.jpg";
-	const char* image_path_two = "awesomeface.jpg";
+	const char* image_path = "container2.jpg";
+	const char* specular_path = "container2_specular.jpg";
 
-	GLuint texture1 = load_texture(image_path, 0, shaderProgram, "texSample", GL_RGB);
-	GLuint texture2 = load_texture(image_path_two, 1, shaderProgram, "texFace", GL_RGB);
-
+	GLuint texture1 = load_texture(image_path, 0, shaderProgram, "texSample");
+	shaderProgram.uniform1i("texSample", 0);
+	
+	GLuint texture2 = load_texture(specular_path, 1, shaderProgram, "specularSample");
+	shaderProgram.uniform1i("specularSample", 1);
 	// TRANSFORMS
 	/////////////
 	glm::vec3 translationVec = glm::vec3(0.2f, -0.2f, 0.0f);
@@ -153,9 +156,6 @@ int main() {
 
 		shaderProgram.useProgram();
 		
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture2);
-
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
@@ -167,6 +167,11 @@ int main() {
 		shaderProgram.uniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		shaderProgram.uniform3f("lightPos", glm::vec3((float)glm::cos(lastTime), 0.5f, (float)glm::sin(lastTime)));
 		shaderProgram.uniform3f("cameraPos", cam.position);
+
+		shaderProgram.uniform3f("material.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
+		shaderProgram.uniform3f("material.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+		shaderProgram.uniform3f("material.specular", glm::vec3(0.8f, 0.8f, 0.8f));
+		shaderProgram.uniform1f("material.shininess", 128.0f);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		

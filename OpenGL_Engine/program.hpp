@@ -10,4 +10,6 @@ public:
 	void useProgram();
 	void uniform3f(const char* uniform_name, glm::vec3 vec);
 	void uniformMatrix4fv(const char* uniform_name, glm::mat4& mat);
+	void uniform1i(const char* uniform_name, GLuint unit);
+	void uniform1f(const char* uniform_name, float x);
 };

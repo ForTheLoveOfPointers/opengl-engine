@@ -25,11 +25,25 @@ void Program::useProgram() {
 }
 
 void Program::uniform3f(const char* uniform_name, glm::vec3 vec) {
+	useProgram();
 	GLuint location = glGetUniformLocation(program_id, uniform_name);
 	glUniform3f(location, vec.x, vec.y, vec.z);
 }
 
 void Program::uniformMatrix4fv(const char* uniform_name, glm::mat4& mat) {
+	useProgram();
 	GLuint location = glGetUniformLocation(program_id, uniform_name);
 	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+}
+
+void Program::uniform1i(const char* uniform_name, GLuint unit) {
+	useProgram();
+	GLuint location = glGetUniformLocation(program_id, uniform_name);
+	glUniform1i(location, unit);
+}
+
+void Program::uniform1f(const char* uniform_name, float x) {
+	useProgram();
+	GLuint location = glGetUniformLocation(program_id, uniform_name);
+	glUniform1f(location, x);
 }
