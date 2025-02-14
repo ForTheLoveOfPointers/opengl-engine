@@ -13,12 +13,14 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
+#include <format>
 
 // custom
 #include "shader.hpp"
 #include "program.hpp"
 #include "camera.hpp"
 #include "./texture_loader/loader.hpp"
+#include "./light_emitters/point-light.hpp"
 
 #define WIDTH 840
 #define HEIGHT 1024
@@ -146,8 +148,13 @@ int main() {
 	// MAIN LOOP
 	////////////
 	// TODO: CLEAN THE MAIN FUNCTION AND MAKE IT SMALLER
-
 	float lastTime = (float)glfwGetTime();
+	PointLight* lightArr[3] = { 0 };
+
+	lightArr[0] = new PointLight( glm::vec3(0.5f, 0.5f, 1.0f) );
+	lightArr[1] = new PointLight( glm::vec3(-0.5f, 0.5f, 1.0f) );
+	lightArr[2] = new PointLight( glm::vec3(0.0f, 0.5f, -0.5f) );
+
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.5, 0.0, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -160,12 +167,15 @@ int main() {
 		glm::mat4 projection = glm::mat4(1.0f);
 		projection = glm::perspective(glm::radians(45.0f), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		
+		for (int i = 0; i < 3; i++) {
+			std::string name = std::format("lightPositions[{}]", i);
+			shaderProgram.uniform3f(name.c_str(), lightArr[i]->position);
+		}
 		// set uniforms
 		shaderProgram.uniformMatrix4fv("model", model);
 		shaderProgram.uniformMatrix4fv("projection", projection);
 		shaderProgram.uniformMatrix4fv("view", cam.view);
 		shaderProgram.uniform3f("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		shaderProgram.uniform3f("lightPos", glm::vec3((float)glm::cos(lastTime), 0.5f, (float)glm::sin(lastTime)));
 		shaderProgram.uniform3f("cameraPos", cam.position);
 
 		shaderProgram.uniform3f("material.ambient", glm::vec3(0.5f, 0.5f, 0.5f));

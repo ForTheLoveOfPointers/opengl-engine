@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="light_emitters\point-light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -145,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.hpp" />
+    <ClInclude Include="light_emitters\point-light.hpp" />
     <ClInclude Include="program.hpp" />
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="texture_loader\loader.hpp" />
