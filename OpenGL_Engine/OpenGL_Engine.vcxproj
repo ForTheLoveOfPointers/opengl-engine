@@ -139,6 +139,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="light_emitters\point-light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model_includes\model_includes.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -147,6 +148,8 @@
   <ItemGroup>
     <ClInclude Include="camera.hpp" />
     <ClInclude Include="light_emitters\point-light.hpp" />
+    <ClInclude Include="model\model.hpp" />
+    <ClInclude Include="model_includes\model_include.hpp" />
     <ClInclude Include="program.hpp" />
     <ClInclude Include="shader.hpp" />
     <ClInclude Include="texture_loader\loader.hpp" />

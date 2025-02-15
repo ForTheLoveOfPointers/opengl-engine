@@ -22,8 +22,8 @@
 #include "./texture_loader/loader.hpp"
 #include "./light_emitters/point-light.hpp"
 
-#define WIDTH 840
-#define HEIGHT 1024
+#define WIDTH 1920
+#define HEIGHT 1080
 
 float delta = 0.0f;
 
@@ -151,8 +151,8 @@ int main() {
 	float lastTime = (float)glfwGetTime();
 	PointLight* lightArr[3] = { 0 };
 
-	lightArr[0] = new PointLight( glm::vec3(0.5f, 0.5f, 1.0f) );
-	lightArr[1] = new PointLight( glm::vec3(-0.5f, 0.5f, 1.0f) );
+	lightArr[0] = new PointLight( glm::vec3(0.2f, 0.5f, 0.5f) );
+	lightArr[1] = new PointLight( glm::vec3(-0.2f, 0.5f, 0.5f) );
 	lightArr[2] = new PointLight( glm::vec3(0.0f, 0.5f, -0.5f) );
 
 	while (!glfwWindowShouldClose(window)) {
