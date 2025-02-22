@@ -5,6 +5,16 @@ uniform vec3 lightColor;
 uniform vec3 lightPositions[3];
 uniform vec3 cameraPos;
 
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+uniform sampler2D texture_diffuse3;
+
+uniform sampler2D texture_specular1;
+uniform sampler2D texture_specular2;
+
+uniform int num_diffuse = 1;
+uniform int num_specular = 1;
+
 in vec2 texCoord;
 in vec3 normal;
 in vec3 fragPosition;
@@ -43,7 +53,25 @@ void main()
 
         diffuseTotal += diffuse;
         specularTotal += specular;
-    }    
-    FragColor = vec4(ambient + diffuseTotal, 1.0) * texture(texSample, texCoord) 
-    + vec4(specularTotal, 1.0) * texture(specularSample, texCoord);
+    }
+    
+    vec4 diff = texture(texture_diffuse1, texCoord);
+
+    if(num_diffuse == 2) { 
+        diff += texture(texture_diffuse2, texCoord);
+    } else if(num_diffuse == 3) {
+        diff += texture(texture_diffuse3, texCoord);
+    }
+    
+    
+
+    vec4 spec = texture(texture_specular1, texCoord);
+    
+    if(num_specular == 2) {
+        spec += texture(texture_specular2, texCoord);
+    }
+
+
+
+    FragColor = vec4(ambient + diffuseTotal, 1.0) * diff + vec4(specularTotal, 1.0) * spec;
 }

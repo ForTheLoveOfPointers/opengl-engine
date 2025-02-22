@@ -112,6 +112,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\unhap\OneDrive\Escritorio\C\Graphics\libs\glfw-3.4.bin.WIN64\lib-vc2022;C:\Program Files\Assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>
+      </Version>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -132,6 +134,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\unhap\OneDrive\Escritorio\C\Graphics\libs\glfw-3.4.bin.WIN64\lib-vc2022;C:\Program Files\Assimp\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>
+      </Version>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -139,6 +143,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="light_emitters\point-light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model\model.cpp" />
     <ClCompile Include="model_includes\model_includes.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />

@@ -124,11 +124,11 @@ int main() {
 	const char* image_path = "container2.jpg";
 	const char* specular_path = "container2_specular.jpg";
 
-	GLuint texture1 = load_texture(image_path, 0, shaderProgram, "texSample");
-	shaderProgram.uniform1i("texSample", 0);
+	GLuint texture1 = load_texture(image_path, 0, shaderProgram, "texture_diffuse1");
+	shaderProgram.uniform1i("texture_diffuse1", 0);
 	
-	GLuint texture2 = load_texture(specular_path, 1, shaderProgram, "specularSample");
-	shaderProgram.uniform1i("specularSample", 1);
+	GLuint texture2 = load_texture(specular_path, 1, shaderProgram, "texture_specular1");
+	shaderProgram.uniform1i("texture_specular1", 1);
 	// TRANSFORMS
 	/////////////
 	glm::vec3 translationVec = glm::vec3(0.2f, -0.2f, 0.0f);
